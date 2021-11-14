@@ -1,0 +1,18 @@
+{
+    "name": "henrique/accessor",
+    "description": "ORM php",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "HenriqueBS0\\Accessor\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "HenriqueBS0",
+            "email": "henrique.10agr@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
