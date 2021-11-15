@@ -180,8 +180,8 @@ abstract class Entity {
 
         foreach ($associations as $association) {
             $entitys[] = $entity
-                ->select([$entityPrimaryKey, $association->{$primaryKeyEntityInAssociation}])
-                ->where()
+                ->select()
+                ->where([$entityPrimaryKey, $association->{$primaryKeyEntityInAssociation}])
                 ->first();
         }
 
