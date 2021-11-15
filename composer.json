@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": ">8.0.12"
+        "php": ">=8.0.12"
     },
     "minimum-stability": "stable",
     "autoload": {
