@@ -179,10 +179,18 @@ abstract class Entity {
         $entitys = [];
 
         foreach ($associations as $association) {
-            $entitys[] = $entity
-                ->select()
-                ->where([$entityPrimaryKey, $association->{$primaryKeyEntityInAssociation}])
-                ->first();
+            $entitys = array_merge(
+                $entitys,
+                ($entity
+                    ->select()
+                    ->where([
+                        $entityPrimaryKey,
+                        $association->{$primaryKeyEntityInAssociation}
+                        ]
+                    )
+                    ->fetch()
+                )
+            );
         }
 
         return $entitys;
