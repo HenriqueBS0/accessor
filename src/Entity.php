@@ -123,7 +123,7 @@ abstract class Entity {
 
     public function count(): int
     {
-        $select = "SELECT COUNT(*) AS total FROM marca";
+        $select = "SELECT COUNT(*) AS total FROM {$this->table}";
         $where = !$this->where ? '' : "WHERE {$this->where}";
         $query = trim("{$select} {$where}") . ';';
 
