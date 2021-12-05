@@ -4,7 +4,8 @@ namespace HenriqueBS0\Accessor;
 
 use PDO;
 
-abstract class Entity {
+abstract class Entity
+{
 
     protected string $table;
     protected array $attributes;
@@ -45,11 +46,10 @@ abstract class Entity {
     {
         $this->beforeDelete();
 
-        $where = !$this->where ? "WHERE {$this->primaryKey} = :id" : "WHERE {$this->where}";
+        $where = !$this->where ? "WHERE {$this->primaryKey} = " . $this->{$this->primaryKey} . "" : "WHERE {$this->where}";
 
-        $query = "DELETE FROM {$this->table} {$where}";
+        $query = "DELETE FROM {$this->table} {$where};";
         $prepare = Connection::get()->prepare($query);
-        $prepare->bindValue(':id', $this->{$this->primaryKey}, PDO::PARAM_INT);
         $prepare->execute();
 
         $this->where = '';
@@ -94,7 +94,7 @@ abstract class Entity {
     {
         $select = $this->select;
 
-        if(trim($select) === '') {
+        if (trim($select) === '') {
             return [];
         }
 
@@ -109,7 +109,7 @@ abstract class Entity {
 
         $this->clearSelect();
 
-        if($all) {
+        if ($all) {
             return $prepare->fetchAll(PDO::FETCH_CLASS, static::class);
         }
 
@@ -132,7 +132,8 @@ abstract class Entity {
         return Connection::get()->query($query)->fetch(PDO::FETCH_OBJ)->total;
     }
 
-    private function clearSelect() {
+    private function clearSelect()
+    {
         $this->select = '';
         $this->where  = '';
         $this->order  = '';
@@ -168,8 +169,7 @@ abstract class Entity {
         string $entityAssociation,
         string $primaryKeyInAssociation,
         string $primaryKeyEntityInAssociation
-    ): array
-    {
+    ): array {
         $associations = (new $entityAssociation())
             ->select()
             ->where([$primaryKeyInAssociation, $this->{$this->primaryKey}])
@@ -183,35 +183,47 @@ abstract class Entity {
                 $entitys,
                 ($entity
                     ->select()
-                    ->where([
-                        $entityPrimaryKey,
-                        $association->{$primaryKeyEntityInAssociation}
+                    ->where(
+                        [
+                            $entityPrimaryKey,
+                            $association->{$primaryKeyEntityInAssociation}
                         ]
                     )
-                    ->fetch()
-                )
+                    ->fetch())
             );
         }
 
         return $entitys;
     }
 
-    protected function beforeInsert(): void {}
-    protected function afterInsert(): void {}
-    protected function beforeUpdate(): void {}
-    protected function afterUpdate(): void {}
-    protected function beforeDelete(): void {}
-    protected function afterDelete(): void {}
+    protected function beforeInsert(): void
+    {
+    }
+    protected function afterInsert(): void
+    {
+    }
+    protected function beforeUpdate(): void
+    {
+    }
+    protected function afterUpdate(): void
+    {
+    }
+    protected function beforeDelete(): void
+    {
+    }
+    protected function afterDelete(): void
+    {
+    }
 
     private static function getTypePDOParam(string|int|bool|null $parameter): int
     {
         switch (true) {
             case is_bool($parameter):
                 $type = PDO::PARAM_BOOL;
-            break;
+                break;
             case is_int($parameter):
                 $type = PDO::PARAM_INT;
-            break;
+                break;
             case is_null($parameter):
                 $type = PDO::PARAM_NULL;
                 break;
@@ -239,7 +251,7 @@ abstract class Entity {
     private function getValuesForBind(): string
     {
         $valuesForBind = [];
-        foreach($this->attributes as $attribute) {
+        foreach ($this->attributes as $attribute) {
             $valuesForBind[] = ":{$attribute}";
         }
         return implode(', ', $valuesForBind);
